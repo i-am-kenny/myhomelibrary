@@ -11,6 +11,9 @@ $init = <<SCRIPT
   sudo -H -u vagrant bash -i -c 'rbenv global 2.3.0'
   sudo -H -u vagrant bash -i -c 'gem install bundler --no-ri --no-rdoc'
 
+  # install Node
+  sudo apt-get -y install nodejs
+
   # some missing dependencies
   sudo apt-get -y update
   sudo apt-get -y install libsqlite3-dev
@@ -18,6 +21,12 @@ SCRIPT
 
 $deploy = <<SCRIPT
   cd /vagrant
+  bash -i -c npm install
+
+  bash -i -c npm build
+
+  bash -i -c cp build/static/js/main.js app/assets/javascripts/main.js
+
   bash -i -c bundler install
 
   bash -i -c 'rake db:migrate'
